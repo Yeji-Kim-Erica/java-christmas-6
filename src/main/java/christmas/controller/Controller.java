@@ -1,5 +1,6 @@
 package christmas.controller;
 
+import christmas.model.domain.Order;
 import christmas.model.domain.VisitDate;
 import christmas.view.InputView;
 import christmas.view.OutputView;
@@ -20,6 +21,7 @@ public class Controller {
         outputView.printHello();
         try {
             VisitDate date = new VisitDate(inputView.readDate());
+            Order order = Order.of(inputView.readOrder());
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e);
         }

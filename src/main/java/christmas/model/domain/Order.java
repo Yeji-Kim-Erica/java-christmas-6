@@ -1,5 +1,6 @@
 package christmas.model.domain;
 
+import christmas.exception.ErrorMessage;
 import christmas.model.constants.MenuType;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ public class Order {
     private final Map<Menu, Integer> detail;
 
     private Order(Map<Menu, Integer> detail) {
+        validate(detail);
         this.detail = detail;
     }
 
@@ -21,7 +23,9 @@ public class Order {
             String menuName = entry.getKey();
             Menu menu = Menu.from(menuName);
             int quantity = entry.getValue();
-            detail.put(menu , quantity);
+            if (detail.put(menu, quantity) != null) {
+                throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+            };
         }
         return new Order(detail);
     }
@@ -48,5 +52,26 @@ public class Order {
             }
         }
         return amount;
+    }
+
+    private void validate(Map<Menu, Integer> detail) {
+        int totalQuantity = 0;
+        Set<Entry<Menu, Integer>> set = detail.entrySet();
+        for (Entry<Menu, Integer> entry : set) {
+            Menu menu = entry.getKey();
+            if (!menu.isTypeOf(MenuType.DRINK)) {
+                return;
+            }
+
+            int quantity = entry.getValue();
+            if (quantity < 1) {
+                throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
+            }
+            totalQuantity += quantity;
+        }
+        if (totalQuantity >= 1 && totalQuantity <= 20) {
+            return;
+        }
+        throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
     }
 }
