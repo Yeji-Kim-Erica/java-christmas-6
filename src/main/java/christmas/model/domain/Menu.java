@@ -38,7 +38,7 @@ public enum Menu {
 
     @Override
     public String toString() {
-        return name;
+        return this.name;
     }
 
     public static Menu from(String name) {

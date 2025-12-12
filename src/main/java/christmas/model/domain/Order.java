@@ -26,7 +26,7 @@ public class Order {
 
     public int calculateTotalCost() {
         int totalCost = 0;
-        Set<Entry<Menu, Integer>> set = detail.entrySet();
+        Set<Entry<Menu, Integer>> set = this.detail.entrySet();
         for (Entry<Menu, Integer> entry : set) {
             Menu menu = entry.getKey();
             int quantity = entry.getValue();

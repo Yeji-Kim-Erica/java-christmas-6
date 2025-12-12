@@ -13,6 +13,6 @@ public enum ErrorMessage {
     }
 
     public String getMessage() {
-        return ERROR_PREFIX + message;
+        return ERROR_PREFIX + this.message;
     }
 }
