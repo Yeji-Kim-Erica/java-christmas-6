@@ -1,5 +1,7 @@
 package christmas.model.domain;
 
+import christmas.exception.ErrorMessage;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -12,6 +14,7 @@ public class VisitDate {
     private final int date;
 
     public VisitDate(int date) {
+        validate(date);
         this.date = date;
     }
 
@@ -31,5 +34,11 @@ public class VisitDate {
 
     public boolean isIncluded(List<Integer> dates) {
         return dates.contains(this.date);
+    }
+
+    private static void validate(int date) {
+        if (date < 1 || date > 31) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_DATE.getMessage());
+        }
     }
 }
