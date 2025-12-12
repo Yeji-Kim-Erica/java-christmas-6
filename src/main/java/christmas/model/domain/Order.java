@@ -1,5 +1,7 @@
 package christmas.model.domain;
 
+import christmas.model.constants.MenuType;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,5 +35,18 @@ public class Order {
             totalCost += menu.calculatePrice(quantity);
         }
         return totalCost;
+    }
+
+    public int getAmountByType(MenuType menuType) {
+        int amount = 0;
+        Set<Entry<Menu, Integer>> set = this.detail.entrySet();
+        for (Entry<Menu, Integer> entry : set) {
+            Menu menu = entry.getKey();
+            int quantity = entry.getValue();
+            if (menu.isTypeOf(menuType)) {
+                amount += quantity;
+            }
+        }
+        return amount;
     }
 }

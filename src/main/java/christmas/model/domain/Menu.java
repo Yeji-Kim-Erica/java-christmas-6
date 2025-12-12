@@ -53,4 +53,8 @@ public enum Menu {
     public int calculatePrice(int quantity) {
         return this.price * quantity;
     }
+
+    public boolean isTypeOf(MenuType menuType) {
+        return menuType.equals(this.menuType);
+    }
 }
