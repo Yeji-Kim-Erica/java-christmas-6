@@ -27,26 +27,22 @@ public class Controller {
         try {
             VisitDate date = new VisitDate(inputView.readDate());
             Order order = Order.of(inputView.readOrder());
-            outputView.printEventDetailInstruction(date);
-            outputView.printOrder(order);
-
-            Benefit benefit= null;
-            if (discountService.isDiscountable(order)) {
-                benefit = createBenefit(date, order);
-            }
-            outputView.printPromotionItem(benefit);
-            outputView.printBenefit(benefit);
-            outputView.printTotalBenefitAmount(benefit);
+            Bill bill = createBill(date, order);
+            outputView.printBill(bill);
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e);
         }
     }
 
-    private Benefit createBenefit(VisitDate date, Order order) {
+    private Bill createBill(VisitDate date, Order order) {
         int totalCost = order.calculateTotalCost();
         int christmasDDayDiscount = discountService.getChristmasDiscount(date);
         int dailyDiscount = discountService.getDailyDiscount(date, order);
         int specialDiscount = discountService.getSpecialDiscountAmount(date);
-        return Benefit.of(totalCost, christmasDDayDiscount, date, dailyDiscount, specialDiscount);
+        Benefit benefit = null;
+        if (discountService.isDiscountable(order)) {
+            benefit = Benefit.of(totalCost, christmasDDayDiscount, date, dailyDiscount, specialDiscount);
+        }
+        return new Bill(date, order, totalCost, benefit);
     }
 }
