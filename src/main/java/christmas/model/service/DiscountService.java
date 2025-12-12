@@ -44,7 +44,7 @@ public class DiscountService {
     }
 
     public int getDailyDiscount(VisitDate date, Order order) {
-        if (isWeekend(date)) {
+        if (date.isWeekend()) {
             return getWeekendDiscount(order);
         }
         return getWeekdayDiscount(order);
@@ -55,11 +55,6 @@ public class DiscountService {
             return SPECIAL_DISCOUNT_AMOUNT;
         }
         return 0;
-    }
-
-    private boolean isWeekend(VisitDate date) {
-        DayOfWeek dayOfWeek = date.getDayOfWeek();
-        return dayOfWeek.equals(DayOfWeek.FRIDAY) || dayOfWeek.equals(DayOfWeek.SATURDAY);
     }
 
     private int getWeekendDiscount(Order order) {

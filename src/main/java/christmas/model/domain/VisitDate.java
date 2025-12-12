@@ -27,9 +27,10 @@ public class VisitDate {
         return Math.max(passedDays, 0);
     }
 
-    public DayOfWeek getDayOfWeek() {
+    public boolean isWeekend() {
         LocalDate localDate = LocalDate.of(year, month, this.date);
-        return DayOfWeek.from(localDate);
+        DayOfWeek dayOfWeek = DayOfWeek.from(localDate);
+        return dayOfWeek.equals(DayOfWeek.FRIDAY) || dayOfWeek.equals(DayOfWeek.SATURDAY);
     }
 
     public boolean isIncluded(List<Integer> dates) {

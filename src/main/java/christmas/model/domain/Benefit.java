@@ -1,36 +1,60 @@
 package christmas.model.domain;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 public class Benefit {
     private static final Menu PROMOTION_MENU = Menu.CHAMPAGNE;
     private static final int PROMOTION_MINIMUM_COST = 120000;
 
-    private final int christmasDDayDiscount;
-    private final int dailyDiscount;
-    private final int specialDiscount;
-    private final int promotionAmount;
+    private final Map<Discount, Integer> benefits;
 
-    private Benefit(int christmasDDayDiscount, int dailyDiscount, int specialDiscount, int promotionItemAmount) {
-        this.christmasDDayDiscount = christmasDDayDiscount;
-        this.dailyDiscount = dailyDiscount;
-        this.specialDiscount = specialDiscount;
-        this.promotionAmount = promotionItemAmount;
+    private Benefit(int christmasDDayDiscount, VisitDate date, int dailyDiscount, int specialDiscount, int promotionItemAmount) {
+        Map<Discount, Integer> benefits = new LinkedHashMap<>();
+        if (christmasDDayDiscount > 0) {
+            benefits.put(Discount.CHRISTMAS_D_DAY, christmasDDayDiscount);
+        }
+        if (dailyDiscount > 0) {
+            Discount discount = getDailyDiscount(date);
+            benefits.put(discount, dailyDiscount);
+        }
+        if (specialDiscount > 0) {
+            benefits.put(Discount.SPECIAL, specialDiscount);
+        }
+        if (promotionItemAmount > 0) {
+            benefits.put(Discount.PROMOTION, promotionItemAmount);
+        }
+        this.benefits = benefits;
     }
 
-    public static Benefit of(int totalCost, int christmasDDayDiscount, int dailyDiscount, int specialDiscount) {
+    public static Benefit of(int totalCost, int christmasDDayDiscount, VisitDate date, int dailyDiscount, int specialDiscount) {
         int promotionAmount = calculatePromotionAmount(totalCost);
-        return new Benefit(christmasDDayDiscount, dailyDiscount, specialDiscount, promotionAmount);
+        return new Benefit(christmasDDayDiscount, date, dailyDiscount, specialDiscount, promotionAmount);
+    }
+
+    public Set<Entry<Discount, Integer>> getBenefitDetails() {
+        return Collections.unmodifiableSet(benefits.entrySet());
     }
 
     public int getTotalBenefitAmount() {
-        return christmasDDayDiscount + dailyDiscount + specialDiscount + promotionAmount;
+        int sum = 0;
+        for (Entry<Discount, Integer> entry : benefits.entrySet()) {
+            sum += entry.getValue();
+        }
+        return sum;
     }
 
     public int getDiscountAmount() {
-        return christmasDDayDiscount + dailyDiscount + specialDiscount;
-    }
-
-    public int getPromotionAmount() {
-        return promotionAmount;
+        int sum = 0;
+        for (Entry<Discount, Integer> entry : benefits.entrySet()) {
+            if (!Discount.PROMOTION.equals(entry.getKey())) {
+                sum += entry.getValue();
+            }
+        }
+        return sum;
     }
 
     public String getPromotionItem() {
@@ -42,5 +66,12 @@ public class Benefit {
             return PROMOTION_MENU.calculatePrice(1);
         }
         return 0;
+    }
+
+    private Discount getDailyDiscount(VisitDate date) {
+        if (date.isWeekend()) {
+            return Discount.DAILY_WEEKEND;
+        }
+        return Discount.DAILY_WEEKDAY;
     }
 }

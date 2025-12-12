@@ -24,6 +24,7 @@ public class OutputView {
         printEventDetailInstruction(bill.getDate());
         printOrder(bill.getOrder());
         printTotalCost(bill.getTotalCost());
+        printPromotionItem(bill.getBenefit());
         printBenefit(bill.getBenefit());
     }
 
@@ -31,40 +32,58 @@ public class OutputView {
         System.out.println();
     }
 
-    private void printEventDetailInstruction(VisitDate date) {
+    public void printEventDetailInstruction(VisitDate date) {
         System.out.printf("12월 %s일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!", date.toString());
         printBlankLine();
     }
 
-    private void printOrder(Order order) {
+    public void printOrder(Order order) {
         printBlankLine();
         System.out.println("<주문 메뉴>");
         for (Entry<Menu, Integer> entry : order.getDetailEntrySet()) {
             Menu menu = entry.getKey();
             int quantity = entry.getValue();
-            System.out.printf("%s %d개", menu.toString(), quantity);
+            System.out.printf("%s %d개", menu, quantity);
             printBlankLine();
         }
     }
 
-    private void printTotalCost(int totalCost) {
+    public void printTotalCost(int totalCost) {
         printBlankLine();
         System.out.println("<할인 전 총주문 금액>");
         System.out.printf("%s원", DECIMAL_FORMAT.format(totalCost));
         printBlankLine();
     }
 
-    private void printBenefit(Benefit benefit) {
+    public void printPromotionItem(Benefit benefit) {
         printBlankLine();
         System.out.println("<증정 메뉴>");
         System.out.printf("%s", getPromotionItem(benefit));
         printBlankLine();
     }
 
-    private String getPromotionItem(Benefit benefit) {
-        if (benefit.getPromotionAmount() > 0) {
+    public String getPromotionItem(Benefit benefit) {
+        if (benefit != null) {
             return String.format("%s 1개", benefit.getPromotionItem());
         }
         return NONE;
+    }
+
+    public void printBenefit(Benefit benefit) {
+        printBlankLine();
+        System.out.println("<혜택 내역>");
+        printBenefitDetails(benefit);
+    }
+
+    public void printBenefitDetails(Benefit benefit) {
+        if (benefit == null) {
+            System.out.println(NONE);
+            return;
+        }
+        for (Entry<Discount, Integer> detail : benefit.getBenefitDetails()) {
+            String amount = DECIMAL_FORMAT.format(detail.getValue());
+            System.out.printf("%s: -%s원", detail.getKey(), amount);
+            printBlankLine();
+        }
     }
 }
