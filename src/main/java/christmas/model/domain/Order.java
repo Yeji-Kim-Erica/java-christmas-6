@@ -56,22 +56,21 @@ public class Order {
 
     private void validate(Map<Menu, Integer> detail) {
         int totalQuantity = 0;
+        boolean isOnlyDrinkOrdered = true;
         Set<Entry<Menu, Integer>> set = detail.entrySet();
         for (Entry<Menu, Integer> entry : set) {
             Menu menu = entry.getKey();
             if (!menu.isTypeOf(MenuType.DRINK)) {
-                return;
+                isOnlyDrinkOrdered = false;
             }
-
             int quantity = entry.getValue();
             if (quantity < 1) {
                 throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
             }
             totalQuantity += quantity;
         }
-        if (totalQuantity >= 1 && totalQuantity <= 20) {
-            return;
+        if (totalQuantity > 20 || isOnlyDrinkOrdered) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
         }
-        throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER.getMessage());
     }
 }

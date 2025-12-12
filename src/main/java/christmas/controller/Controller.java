@@ -22,6 +22,7 @@ public class Controller {
         try {
             VisitDate date = new VisitDate(inputView.readDate());
             Order order = Order.of(inputView.readOrder());
+            outputView.printEventDetailInstruction(date);
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e);
         }

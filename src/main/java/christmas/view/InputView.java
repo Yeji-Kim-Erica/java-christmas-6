@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * 프로그램의 모든 입력을 담당하는 클래스
  */
 public class InputView {
-    private static final Pattern PATTERN = Pattern.compile("(.+)-(d+),*");
+    private static final Pattern PATTERN = Pattern.compile("(\\D+)-(\\d+),*");
 
     public int readDate() {
         System.out.println("12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)");
