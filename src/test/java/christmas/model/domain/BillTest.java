@@ -30,5 +30,24 @@ public class BillTest {
             // then
             assertThat(bill.getTotalPriceExpected()).isEqualTo(152000);
         }
+
+        @DisplayName("총혜택 금액에 따라 12월 이벤트 배지를 증정한다")
+        @Test
+        void should_awardBadge_ByTotalBenefitAmount() {
+            // given
+            VisitDate date = new VisitDate(5);
+            Map<String, Integer> detail = new HashMap<>();
+            detail.put("크리스마스파스타", 4);
+            detail.put("티본스테이크", 1);
+            Order order = Order.of(detail);
+            int totalCost = order.calculateTotalCost();
+            Benefit benefit = Benefit.of(totalCost, 1000, 1000, 1000);
+
+            // when
+            Bill bill = new Bill(date, order, benefit);
+
+            // then
+            assertThat(bill.getBadge()).isEqualTo(EventBadge.SANTA);
+        }
     }
 }

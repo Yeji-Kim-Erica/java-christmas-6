@@ -12,4 +12,17 @@ public enum EventBadge {
         this.name = name;
         this.standard = standard;
     }
+
+    public static EventBadge of(int benefitAmount) {
+        if (benefitAmount >= SANTA.standard) {
+            return SANTA;
+        }
+        if (benefitAmount >= TREE.standard) {
+            return TREE;
+        }
+        if (benefitAmount >= STAR.standard) {
+            return STAR;
+        }
+        return null;
+    }
 }

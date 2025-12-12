@@ -3,10 +3,10 @@ package christmas.model.domain;
 public class Bill {
     private final VisitDate date;
     private final Order order;
-    private final Integer totalCost;
+    private final int totalCost;
     private final Benefit benefit;
-    private final Integer totalBenefitAmount;
-    private final Integer totalPriceExpected;
+    private final int totalBenefitAmount;
+    private final int totalPriceExpected;
     private final EventBadge badge;
 
     public Bill(VisitDate date, Order order, Benefit benefit) {
@@ -25,7 +25,11 @@ public class Bill {
         return totalPriceExpected;
     }
 
+    public EventBadge getBadge() {
+        return badge;
+    }
+
     private EventBadge awardBadge(int totalBenefitAmount) {
-        return null;
+        return EventBadge.of(totalBenefitAmount);
     }
 }
