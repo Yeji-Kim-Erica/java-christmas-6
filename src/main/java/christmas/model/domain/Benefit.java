@@ -33,6 +33,10 @@ public class Benefit {
         return promotionAmount;
     }
 
+    public String getPromotionItem() {
+        return PROMOTION_MENU.toString();
+    }
+
     private static int calculatePromotionAmount(int totalCost) {
         if (totalCost >= PROMOTION_MINIMUM_COST) {
             return PROMOTION_MENU.calculatePrice(1);

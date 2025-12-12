@@ -1,9 +1,6 @@
 package christmas.view;
 
-import christmas.model.domain.Bill;
-import christmas.model.domain.Menu;
-import christmas.model.domain.Order;
-import christmas.model.domain.VisitDate;
+import christmas.model.domain.*;
 
 import java.text.DecimalFormat;
 import java.util.Map.Entry;
@@ -13,6 +10,7 @@ import java.util.Map.Entry;
  */
 public class OutputView {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###");
+    private static final String NONE = "없음";
 
     public void printErrorMessage(IllegalArgumentException e) {
         System.out.println(e.getMessage());
@@ -26,6 +24,7 @@ public class OutputView {
         printEventDetailInstruction(bill.getDate());
         printOrder(bill.getOrder());
         printTotalCost(bill.getTotalCost());
+        printBenefit(bill.getBenefit());
     }
 
     private void printBlankLine() {
@@ -53,5 +52,19 @@ public class OutputView {
         System.out.println("<할인 전 총주문 금액>");
         System.out.printf("%s원", DECIMAL_FORMAT.format(totalCost));
         printBlankLine();
+    }
+
+    private void printBenefit(Benefit benefit) {
+        printBlankLine();
+        System.out.println("<증정 메뉴>");
+        System.out.printf("%s", getPromotionItem(benefit));
+        printBlankLine();
+    }
+
+    private String getPromotionItem(Benefit benefit) {
+        if (benefit.getPromotionAmount() > 0) {
+            return String.format("%s 1개", benefit.getPromotionItem());
+        }
+        return NONE;
     }
 }
