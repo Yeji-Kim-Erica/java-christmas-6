@@ -1,6 +1,7 @@
 package christmas.config;
 
 import christmas.controller.Controller;
+import christmas.model.service.DiscountService;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
@@ -14,7 +15,9 @@ public class AppConfig {
         public static final InputView INPUT_VIEW = new InputView();
         public static final OutputView OUTPUT_VIEW = new OutputView();
 
-        public static final Controller CONTROLLER = new Controller(INPUT_VIEW, OUTPUT_VIEW);
+        public static final DiscountService DISCOUNT_SERVICE = new DiscountService();
+
+        public static final Controller CONTROLLER = new Controller(INPUT_VIEW, OUTPUT_VIEW, DISCOUNT_SERVICE);
     }
 
     private AppConfig() {}

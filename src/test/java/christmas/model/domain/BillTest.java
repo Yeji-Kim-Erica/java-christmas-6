@@ -25,7 +25,7 @@ public class BillTest {
             Benefit benefit = Benefit.of(totalCost, 1000, 1000, 1000);
 
             // when
-            Bill bill = new Bill(date, order, benefit);
+            Bill bill = new Bill(date, order, totalCost, benefit);
 
             // then
             assertThat(bill.getTotalPriceExpected()).isEqualTo(152000);
@@ -44,7 +44,7 @@ public class BillTest {
             Benefit benefit = Benefit.of(totalCost, 1000, 1000, 1000);
 
             // when
-            Bill bill = new Bill(date, order, benefit);
+            Bill bill = new Bill(date, order, totalCost, benefit);
 
             // then
             assertThat(bill.getBadge()).isEqualTo(EventBadge.SANTA);

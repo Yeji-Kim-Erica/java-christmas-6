@@ -1,7 +1,10 @@
 package christmas.controller;
 
+import christmas.model.domain.Benefit;
+import christmas.model.domain.Bill;
 import christmas.model.domain.Order;
 import christmas.model.domain.VisitDate;
+import christmas.model.service.DiscountService;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
@@ -11,10 +14,12 @@ import christmas.view.OutputView;
 public class Controller {
     private final InputView inputView;
     private final OutputView outputView;
+    private final DiscountService discountService;
 
-    public Controller(InputView inputView, OutputView outputView) {
+    public Controller(InputView inputView, OutputView outputView, DiscountService discountService) {
         this.inputView = inputView;
         this.outputView = outputView;
+        this.discountService = discountService;
     }
 
     public void run() {
@@ -22,10 +27,19 @@ public class Controller {
         try {
             VisitDate date = new VisitDate(inputView.readDate());
             Order order = Order.of(inputView.readOrder());
-            outputView.printEventDetailInstruction(date);
-            outputView.printOrder(order);
+            Bill bill = createBill(date, order);
+            outputView.printBill(bill);
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e);
         }
+    }
+
+    private Bill createBill(VisitDate date, Order order) {
+        int totalCost = order.calculateTotalCost();
+        int christmasDDayDiscount = discountService.getChristmasDiscount(date);
+        int dailyDiscount = discountService.getDailyDiscount(date, order);
+        int specialDiscount = discountService.getSpecialDiscountAmount(date);
+        Benefit benefit = Benefit.of(totalCost, christmasDDayDiscount, dailyDiscount, specialDiscount);
+        return new Bill(date, order, totalCost, benefit);
     }
 }
