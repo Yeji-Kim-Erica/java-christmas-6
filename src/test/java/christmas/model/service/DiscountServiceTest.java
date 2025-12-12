@@ -64,5 +64,22 @@ public class DiscountServiceTest {
             // when & then
             assertThat(service.getDailyDiscount(date, order)).isEqualTo(2023*6);
         }
+
+        @DisplayName("주말 할인 금액을 계산한다")
+        @Test
+        void should_Calculate_WeekendDiscount() {
+            // given
+            VisitDate date = new VisitDate(8);
+
+            Map<String, Integer> detail = new HashMap<>();
+            detail.put("양송이수프", 1);
+            detail.put("티본스테이크", 1);
+            detail.put("바비큐립", 2);
+            detail.put("해산물파스타", 2);
+            Order order = Order.of(detail);
+
+            // when & then
+            assertThat(service.getDailyDiscount(date, order)).isEqualTo(2023*5);
+        }
     }
 }

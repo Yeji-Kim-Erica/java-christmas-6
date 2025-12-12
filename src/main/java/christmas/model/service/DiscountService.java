@@ -18,6 +18,8 @@ public class DiscountService {
     // Daily Discount
     private static final MenuType WEEKDAY_DISCOUNT_MENU_TYPE = MenuType.DESSERT;
     private static final int WEEKDAY_BASE_DISCOUNT_AMOUNT = 2023;
+    private static final MenuType WEEKEND_DISCOUNT_MENU_TYPE = MenuType.MAIN;
+    private static final int WEEKEND_BASE_DISCOUNT_AMOUNT = 2023;
 
     public boolean isDiscountable(Order order) {
         int totalCost = order.calculateTotalCost();
@@ -38,7 +40,7 @@ public class DiscountService {
 
     public int getDailyDiscount(VisitDate date, Order order) {
         if (isWeekend(date)) {
-            return 0;
+            return getWeekendDiscount(order);
         }
         return getWeekdayDiscount(order);
     }
@@ -46,6 +48,11 @@ public class DiscountService {
     private boolean isWeekend(VisitDate date) {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         return dayOfWeek.equals(DayOfWeek.FRIDAY) || dayOfWeek.equals(DayOfWeek.SATURDAY);
+    }
+
+    private int getWeekendDiscount(Order order) {
+        int menuAmount = order.getAmountByType(WEEKEND_DISCOUNT_MENU_TYPE);
+        return WEEKEND_BASE_DISCOUNT_AMOUNT * menuAmount;
     }
 
     private int getWeekdayDiscount(Order order) {
