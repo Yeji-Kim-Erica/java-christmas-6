@@ -36,6 +36,7 @@ public class Controller {
             }
             outputView.printPromotionItem(benefit);
             outputView.printBenefit(benefit);
+            outputView.printTotalBenefitAmount(benefit);
         } catch (IllegalArgumentException e) {
             outputView.printErrorMessage(e);
         }
