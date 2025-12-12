@@ -28,6 +28,7 @@ public class OutputView {
         printBenefit(benefit);
         printTotalBenefitAmount(bill.getTotalBenefitAmount());
         printExpectedPaymentPrice(bill.getTotalPriceExpected());
+        printEventBadge(bill.getBadge());
     }
 
     private void printBlankLine() {
@@ -65,7 +66,7 @@ public class OutputView {
     }
 
     private String getPromotionItem(Benefit benefit) {
-        if (benefit != null) {
+        if (benefit != null && benefit.getPromotionItem() != null) {
             return String.format("%s 1개", benefit.getPromotionItem());
         }
         return NONE;
@@ -100,5 +101,15 @@ public class OutputView {
         System.out.println("<할인 후 예상 결제 금액>");
         System.out.printf("%,d원", expectedPrice);
         printBlankLine();
+    }
+
+    private void printEventBadge(EventBadge badge) {
+        printBlankLine();
+        System.out.println("<12월 이벤트 배지>");
+        if (badge == null) {
+            System.out.println(NONE);
+            return;
+        }
+        System.out.println(badge);
     }
 }

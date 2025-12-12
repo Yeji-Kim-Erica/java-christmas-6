@@ -4,9 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BenefitTest {
@@ -16,17 +13,17 @@ public class BenefitTest {
         @Test
         void should_GiveawayPromotionMenu_WhenTotalCostIsMinimumOrMore() {
             // when
-            Benefit benefit = Benefit.of(120000, 0, 0, 0);
+            Benefit benefit = Benefit.of(120000, 0, new VisitDate(1) ,0, 0);
 
             // then
-            assertThat(benefit.getPromotionAmount()).isEqualTo(25000);
+            assertThat(benefit.getPromotionItem()).isNotNull();
         }
 
         @DisplayName("총혜택 금액을 계산한다")
         @Test
         void should_calculateTotalBenefitAmount() {
             // when
-            Benefit benefit = Benefit.of(120000, 1000, 1000, 1000);
+            Benefit benefit = Benefit.of(120000, 1000, new VisitDate(1), 1000, 1000);
 
             // then
             assertThat(benefit.getTotalBenefitAmount()).isEqualTo(28000);

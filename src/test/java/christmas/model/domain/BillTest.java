@@ -22,7 +22,7 @@ public class BillTest {
             detail.put("티본스테이크", 1);
             Order order = Order.of(detail);
             int totalCost = order.calculateTotalCost();
-            Benefit benefit = Benefit.of(totalCost, 1000, 1000, 1000);
+            Benefit benefit = Benefit.of(totalCost, 1000, new VisitDate(1), 1000, 1000);
 
             // when
             Bill bill = new Bill(date, order, totalCost, benefit);
@@ -41,7 +41,7 @@ public class BillTest {
             detail.put("티본스테이크", 1);
             Order order = Order.of(detail);
             int totalCost = order.calculateTotalCost();
-            Benefit benefit = Benefit.of(totalCost, 1000, 1000, 1000);
+            Benefit benefit = Benefit.of(totalCost, 1000, new VisitDate(1), 1000, 1000);
 
             // when
             Bill bill = new Bill(date, order, totalCost, benefit);

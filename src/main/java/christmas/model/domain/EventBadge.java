@@ -25,4 +25,9 @@ public enum EventBadge {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

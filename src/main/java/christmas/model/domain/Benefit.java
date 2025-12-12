@@ -58,7 +58,10 @@ public class Benefit {
     }
 
     public String getPromotionItem() {
-        return PROMOTION_MENU.toString();
+        if (benefits.get(Discount.PROMOTION) != null) {
+            return PROMOTION_MENU.toString();
+        }
+        return null;
     }
 
     private static int calculatePromotionAmount(int totalCost) {
