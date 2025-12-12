@@ -28,5 +28,22 @@ public class BenefitTest {
             // then
             assertThat(benefit.getPromotionAmount()).isEqualTo(25000);
         }
+
+        @DisplayName("총혜택 금액을 계산한다")
+        @Test
+        void should_calculateTotalBenefitAmount() {
+            // given
+            VisitDate date = new VisitDate(5);
+            Map<String, Integer> detail = new HashMap<>();
+            detail.put("티본스테이크", 4);
+            Order order = Order.of(detail);
+            int totalCost = order.calculateTotalCost();
+
+            // when
+            Benefit benefit = Benefit.of(totalCost, 1000, 1000, 1000);
+
+            // then
+            assertThat(benefit.getTotalBenefitAmount()).isEqualTo(28000);
+        }
     }
 }
