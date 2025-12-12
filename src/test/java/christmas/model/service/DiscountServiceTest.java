@@ -81,5 +81,17 @@ public class DiscountServiceTest {
             // when & then
             assertThat(service.getDailyDiscount(date, order)).isEqualTo(2023*5);
         }
+
+        @DisplayName("특별 할인 금액을 계산한다")
+        @Test
+        void should_Calculate_SpecialDiscount() {
+            // given
+            VisitDate specialDate = new VisitDate(10);
+            VisitDate ordinaryDate = new VisitDate(11);
+
+            // when & then
+            assertThat(service.getSpecialDiscountAmount(specialDate)).isEqualTo(1000);
+            assertThat(service.getSpecialDiscountAmount(ordinaryDate)).isEqualTo(0);
+        }
     }
 }

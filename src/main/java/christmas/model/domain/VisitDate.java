@@ -3,6 +3,7 @@ package christmas.model.domain;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 public class VisitDate {
     private static final int year = 2023;
@@ -26,5 +27,9 @@ public class VisitDate {
     public DayOfWeek getDayOfWeek() {
         LocalDate localDate = LocalDate.of(year, month, this.date);
         return DayOfWeek.from(localDate);
+    }
+
+    public boolean isIncluded(List<Integer> dates) {
+        return dates.contains(this.date);
     }
 }

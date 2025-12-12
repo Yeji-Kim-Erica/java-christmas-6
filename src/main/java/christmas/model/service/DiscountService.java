@@ -5,6 +5,7 @@ import christmas.model.domain.Order;
 import christmas.model.domain.VisitDate;
 
 import java.time.DayOfWeek;
+import java.util.List;
 
 public class DiscountService {
     private static final int MINIMUM_PRICE_FOR_DISCOUNT = 10000;
@@ -20,6 +21,10 @@ public class DiscountService {
     private static final int WEEKDAY_BASE_DISCOUNT_AMOUNT = 2023;
     private static final MenuType WEEKEND_DISCOUNT_MENU_TYPE = MenuType.MAIN;
     private static final int WEEKEND_BASE_DISCOUNT_AMOUNT = 2023;
+
+    // Special Discount
+    private static final List<Integer> SPECIAL_DISCOUNT_DAYS = List.of(3, 10, 17, 24, 25, 31);
+    private static final int SPECIAL_DISCOUNT_AMOUNT = 1000;
 
     public boolean isDiscountable(Order order) {
         int totalCost = order.calculateTotalCost();
@@ -43,6 +48,13 @@ public class DiscountService {
             return getWeekendDiscount(order);
         }
         return getWeekdayDiscount(order);
+    }
+
+    public int getSpecialDiscountAmount(VisitDate date) {
+        if (date.isIncluded(SPECIAL_DISCOUNT_DAYS)) {
+            return SPECIAL_DISCOUNT_AMOUNT;
+        }
+        return 0;
     }
 
     private boolean isWeekend(VisitDate date) {
