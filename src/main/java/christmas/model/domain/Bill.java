@@ -21,6 +21,10 @@ public class Bill {
         this.badge = awardBadge(totalBenefitAmount);
     }
 
+    public int getTotalPriceExpected() {
+        return totalPriceExpected;
+    }
+
     private EventBadge awardBadge(int totalBenefitAmount) {
         return null;
     }

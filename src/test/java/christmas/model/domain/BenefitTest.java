@@ -15,15 +15,8 @@ public class BenefitTest {
         @DisplayName("할인 전 총주문 금액이 12만 원 이상일 때 증정 이벤트가 발생한다")
         @Test
         void should_GiveawayPromotionMenu_WhenTotalCostIsMinimumOrMore() {
-            // given
-            VisitDate date = new VisitDate(5);
-            Map<String, Integer> detail = new HashMap<>();
-            detail.put("티본스테이크", 4);
-            Order order = Order.of(detail);
-            int totalCost = order.calculateTotalCost();
-
             // when
-            Benefit benefit = Benefit.of(totalCost, 0, 0, 0);
+            Benefit benefit = Benefit.of(120000, 0, 0, 0);
 
             // then
             assertThat(benefit.getPromotionAmount()).isEqualTo(25000);
@@ -32,15 +25,8 @@ public class BenefitTest {
         @DisplayName("총혜택 금액을 계산한다")
         @Test
         void should_calculateTotalBenefitAmount() {
-            // given
-            VisitDate date = new VisitDate(5);
-            Map<String, Integer> detail = new HashMap<>();
-            detail.put("티본스테이크", 4);
-            Order order = Order.of(detail);
-            int totalCost = order.calculateTotalCost();
-
             // when
-            Benefit benefit = Benefit.of(totalCost, 1000, 1000, 1000);
+            Benefit benefit = Benefit.of(120000, 1000, 1000, 1000);
 
             // then
             assertThat(benefit.getTotalBenefitAmount()).isEqualTo(28000);
