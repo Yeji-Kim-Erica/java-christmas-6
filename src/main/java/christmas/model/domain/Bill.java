@@ -9,15 +9,14 @@ public class Bill {
     private final int totalPriceExpected;
     private final EventBadge badge;
 
-    public Bill(VisitDate date, Order order, int totalCost, Benefit benefit) {
+    public Bill(VisitDate date, Order order, Benefit benefit) {
         this.date = date;
         this.order = order;
-        this.totalCost = totalCost;
+        this.totalCost = order.calculateTotalCost();
         this.benefit = benefit;
-        int totalBenefitAmount = calculateTotalBenefitAmount(benefit);
-        this.totalBenefitAmount = totalBenefitAmount;
+        this.totalBenefitAmount = calculateTotalBenefitAmount(benefit);
         this.totalPriceExpected = calculateTotalPriceExpected(totalCost, benefit);
-        this.badge = awardBadge(totalBenefitAmount);
+        this.badge = benefit.awardBadge();
     }
 
     public VisitDate getDate() {
@@ -49,21 +48,10 @@ public class Bill {
     }
 
     private int calculateTotalBenefitAmount(Benefit benefit) {
-        if (benefit != null) {
-            return benefit.getTotalBenefitAmount();
-        }
-        return 0;
+        return benefit.getTotalBenefitAmount();
     }
 
     private int calculateTotalPriceExpected(int totalCost, Benefit benefit) {
-        int priceExpected = totalCost;
-        if (benefit != null) {
-            priceExpected -= benefit.getDiscountAmount();
-        }
-        return priceExpected;
-    }
-
-    private EventBadge awardBadge(int totalBenefitAmount) {
-        return EventBadge.of(totalBenefitAmount);
+        return totalCost - benefit.getTotalDiscountAmount();
     }
 }

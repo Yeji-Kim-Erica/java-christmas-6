@@ -1,9 +1,8 @@
 package christmas.model.domain;
 
 import christmas.exception.ErrorMessage;
-import christmas.model.constants.MenuType;
 
-import static christmas.model.constants.MenuType.*;
+import static christmas.model.domain.MenuType.*;
 
 public enum Menu {
     // 애피타이저

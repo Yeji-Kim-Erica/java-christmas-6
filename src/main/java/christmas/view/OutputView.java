@@ -1,7 +1,7 @@
 package christmas.view;
 
+import christmas.model.domain.discount.DiscountType;
 import christmas.model.domain.*;
-import org.mockito.internal.matchers.Or;
 
 import java.util.Map.Entry;
 
@@ -9,7 +9,7 @@ import java.util.Map.Entry;
  * 프로그램의 모든 출력을 담당하는 클래스
  */
 public class OutputView {
-    private static final String NONE = "없음";
+    public static final String NONE = "없음";
 
     public void printErrorMessage(IllegalArgumentException e) {
         System.out.println(e.getMessage());
@@ -66,8 +66,9 @@ public class OutputView {
     }
 
     private String getPromotionItem(Benefit benefit) {
-        if (benefit != null && benefit.getPromotionItem() != null) {
-            return String.format("%s 1개", benefit.getPromotionItem());
+        Menu promotionItem = benefit.getPromotionItem();
+        if (promotionItem != null) {
+            return String.format("%s 1개", promotionItem);
         }
         return NONE;
     }
@@ -79,12 +80,16 @@ public class OutputView {
     }
 
     private void printBenefitDetails(Benefit benefit) {
-        if (benefit == null) {
+        if (benefit.isEmpty()) {
             System.out.println(NONE);
             return;
         }
-        for (Entry<Discount, Integer> detail : benefit.getBenefitDetails()) {
-            System.out.printf("%s: -%,d원", detail.getKey(), detail.getValue());
+        for (DiscountType discountType : DiscountType.values()) {
+            Integer discountAmount = benefit.getDiscountAmount(discountType);
+            if (discountAmount == null) {
+                continue;
+            }
+            System.out.printf("%s: -%,d원", discountType, discountAmount);
             printBlankLine();
         }
     }
@@ -106,10 +111,6 @@ public class OutputView {
     private void printEventBadge(EventBadge badge) {
         printBlankLine();
         System.out.println("<12월 이벤트 배지>");
-        if (badge == null) {
-            System.out.println(NONE);
-            return;
-        }
         System.out.println(badge);
     }
 }

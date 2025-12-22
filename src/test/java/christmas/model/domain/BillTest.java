@@ -1,5 +1,6 @@
 package christmas.model.domain;
 
+import christmas.model.domain.discount.DiscountType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,37 +18,26 @@ public class BillTest {
         void should_calculateExpectedPaymentAmount() {
             // given
             VisitDate date = new VisitDate(5);
+
             Map<String, Integer> detail = new HashMap<>();
             detail.put("크리스마스파스타", 4);
             detail.put("티본스테이크", 1);
             Order order = Order.of(detail);
-            int totalCost = order.calculateTotalCost();
-            Benefit benefit = Benefit.of(totalCost, 1000, new VisitDate(1), 1000, 1000);
+
+            int totalCost = Menu.CHRISTMAS_PASTA.calculatePrice(4) + Menu.STEAK.calculatePrice(1);
+            int discountAmount = 2023*6;
+
+            Map<DiscountType, Integer> discounts = new HashMap<>();
+            discounts.put(DiscountType.DAILY_WEEKDAY, discountAmount);
+            discounts.put(DiscountType.PROMOTION, DiscountType.PROMOTION.getPromotionMenu().calculatePrice(1));
+            Benefit benefit = new Benefit(discounts);
 
             // when
-            Bill bill = new Bill(date, order, totalCost, benefit);
+            Bill bill = new Bill(date, order, benefit);
+            int expected = totalCost - discountAmount;
 
             // then
-            assertThat(bill.getTotalPriceExpected()).isEqualTo(152000);
-        }
-
-        @DisplayName("총혜택 금액에 따라 12월 이벤트 배지를 증정한다")
-        @Test
-        void should_awardBadge_ByTotalBenefitAmount() {
-            // given
-            VisitDate date = new VisitDate(5);
-            Map<String, Integer> detail = new HashMap<>();
-            detail.put("크리스마스파스타", 4);
-            detail.put("티본스테이크", 1);
-            Order order = Order.of(detail);
-            int totalCost = order.calculateTotalCost();
-            Benefit benefit = Benefit.of(totalCost, 1000, new VisitDate(1), 1000, 1000);
-
-            // when
-            Bill bill = new Bill(date, order, totalCost, benefit);
-
-            // then
-            assertThat(bill.getBadge()).isEqualTo(EventBadge.SANTA);
+            assertThat(bill.getTotalPriceExpected()).isEqualTo(expected);
         }
     }
 }

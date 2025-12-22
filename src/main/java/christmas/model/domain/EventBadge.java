@@ -3,7 +3,8 @@ package christmas.model.domain;
 public enum EventBadge {
     STAR("별", 5000),
     TREE("트리", 10000),
-    SANTA("산타", 20000);
+    SANTA("산타", 20000),
+    NONE("없음", 0);
 
     private final String name;
     private final int standard;
@@ -23,7 +24,7 @@ public enum EventBadge {
         if (benefitAmount >= STAR.standard) {
             return STAR;
         }
-        return null;
+        return NONE;
     }
 
     @Override

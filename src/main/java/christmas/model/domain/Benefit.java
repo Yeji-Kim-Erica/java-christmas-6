@@ -1,80 +1,61 @@
 package christmas.model.domain;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import christmas.model.domain.discount.DiscountType;
+
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class Benefit {
-    private static final Menu PROMOTION_MENU = Menu.CHAMPAGNE;
-    private static final int PROMOTION_MINIMUM_COST = 120000;
+    public static final Benefit EMPTY = new Benefit(new EnumMap<>(DiscountType.class));
 
-    private final Map<Discount, Integer> benefits;
+    private final Map<DiscountType, Integer> benefits;
 
-    private Benefit(int christmasDDayDiscount, VisitDate date, int dailyDiscount, int specialDiscount, int promotionItemAmount) {
-        Map<Discount, Integer> benefits = new LinkedHashMap<>();
-        if (christmasDDayDiscount > 0) {
-            benefits.put(Discount.CHRISTMAS_D_DAY, christmasDDayDiscount);
-        }
-        if (dailyDiscount > 0) {
-            Discount discount = getDailyDiscount(date);
-            benefits.put(discount, dailyDiscount);
-        }
-        if (specialDiscount > 0) {
-            benefits.put(Discount.SPECIAL, specialDiscount);
-        }
-        if (promotionItemAmount > 0) {
-            benefits.put(Discount.PROMOTION, promotionItemAmount);
-        }
-        this.benefits = benefits;
+    public Benefit(Map<DiscountType, Integer> benefits) {
+        this.benefits = new EnumMap<>(benefits);
     }
 
-    public static Benefit of(int totalCost, int christmasDDayDiscount, VisitDate date, int dailyDiscount, int specialDiscount) {
-        int promotionAmount = calculatePromotionAmount(totalCost);
-        return new Benefit(christmasDDayDiscount, date, dailyDiscount, specialDiscount, promotionAmount);
-    }
-
-    public Set<Entry<Discount, Integer>> getBenefitDetails() {
+    public Set<Entry<DiscountType, Integer>> getBenefitDetails() {
         return Collections.unmodifiableSet(benefits.entrySet());
+    }
+
+    public boolean isEmpty() {
+        return benefits.isEmpty();
+    }
+
+    public Integer getDiscountAmount(DiscountType discountType) {
+        return benefits.get(discountType);
     }
 
     public int getTotalBenefitAmount() {
         int sum = 0;
-        for (Entry<Discount, Integer> entry : benefits.entrySet()) {
+        for (Entry<DiscountType, Integer> entry : benefits.entrySet()) {
             sum += entry.getValue();
         }
         return sum;
     }
 
-    public int getDiscountAmount() {
+    public int getTotalDiscountAmount() {
         int sum = 0;
-        for (Entry<Discount, Integer> entry : benefits.entrySet()) {
-            if (!Discount.PROMOTION.equals(entry.getKey())) {
+        for (Entry<DiscountType, Integer> entry : benefits.entrySet()) {
+            if (!entry.getKey().isPromotion()) {
                 sum += entry.getValue();
             }
         }
         return sum;
     }
 
-    public String getPromotionItem() {
-        if (benefits.get(Discount.PROMOTION) != null) {
-            return PROMOTION_MENU.toString();
+    public Menu getPromotionItem() {
+        for (Entry<DiscountType, Integer> entry : benefits.entrySet()) {
+            DiscountType discountType = entry.getKey();
+            if (discountType.isPromotion()) {
+                return discountType.getPromotionMenu();
+            }
         }
         return null;
     }
 
-    private static int calculatePromotionAmount(int totalCost) {
-        if (totalCost >= PROMOTION_MINIMUM_COST) {
-            return PROMOTION_MENU.calculatePrice(1);
-        }
-        return 0;
-    }
-
-    private Discount getDailyDiscount(VisitDate date) {
-        if (date.isWeekend()) {
-            return Discount.DAILY_WEEKEND;
-        }
-        return Discount.DAILY_WEEKDAY;
+    public EventBadge awardBadge() {
+        int totalBenefitAmount= getTotalBenefitAmount();
+        return EventBadge.of(totalBenefitAmount);
     }
 }

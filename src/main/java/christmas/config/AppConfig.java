@@ -1,9 +1,12 @@
 package christmas.config;
 
 import christmas.controller.Controller;
+import christmas.model.domain.discount.*;
 import christmas.model.service.DiscountService;
 import christmas.view.InputView;
 import christmas.view.OutputView;
+
+import java.util.List;
 
 /**
  * 애플리케이션의 실행에 필요한 모든 객체를 생성하고 서로 연결하는 설정 클래스
@@ -15,7 +18,7 @@ public class AppConfig {
         public static final InputView INPUT_VIEW = new InputView();
         public static final OutputView OUTPUT_VIEW = new OutputView();
 
-        public static final DiscountService DISCOUNT_SERVICE = new DiscountService();
+        public static final DiscountService DISCOUNT_SERVICE = new DiscountService(createDiscountPolicies());
 
         public static final Controller CONTROLLER = new Controller(INPUT_VIEW, OUTPUT_VIEW, DISCOUNT_SERVICE);
     }
@@ -28,5 +31,15 @@ public class AppConfig {
 
     public Controller controller() {
         return LazyHolder.CONTROLLER;
+    }
+
+    private static List<DiscountPolicy> createDiscountPolicies() {
+        return List.of(
+                new ChristmasDDayDiscount(),
+                new WeekdayDiscount(),
+                new WeekendDiscount(),
+                new SpecialDiscount(),
+                new PromotionDiscount()
+        );
     }
 }

@@ -1,7 +1,6 @@
 package christmas.model.domain;
 
 import christmas.exception.ErrorMessage;
-import christmas.model.constants.MenuType;
 
 import java.util.Collections;
 import java.util.HashMap;
